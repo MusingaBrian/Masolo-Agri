@@ -38,7 +38,12 @@ feature depends on session and roles).
   (framework-dependent win-x64 single file into `publish/`).
 - Docs rewritten to as-built state: `docs/ARCHITECTURE.md`,
   `docs/DEPENDENCIES.md`, `database/README.md`.
-- Git initialized. No commits yet (commits need explicit request).
+- Git initialized, committed, and pushed to
+  https://github.com/MusingaBrian/Masolo-Agri (`main` tracks
+  `origin/main`). History: `cb725c7` (remote template README) +
+  foundation commit on top via rebase; README conflict resolved in favor
+  of the project README. Commit identity: MusingaBrian with the GitHub
+  noreply email.
 - 2 MSTest smoke tests pass: hasher round-trip, SQLite in-memory connect.
 
 ## Work in progress
@@ -47,11 +52,9 @@ Nothing. Foundation is closed out and green.
 
 ## Remaining tasks
 
-1. Initial commit (needs explicit user request).
-2. Feature work, in dependency order: auth/users first, then commodities,
-   purchases, sales (+ receipt), stock ledger/adjustments, dashboard,
-   reports.
-3. Full EF Core schema + first migration (arrives with the first feature
+1. Start the auth/users feature: user entity, password login/logout,
+   session over the bridge, role enforcement in C#.
+2. Full EF Core schema + first migration (arrives with the first feature
    that persists data).
 
 ## Technical decisions
