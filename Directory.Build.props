@@ -1,0 +1,9 @@
+<Project>
+  <!-- Shared defaults for every C# project. Nullable and implicit usings
+       are on everywhere; Release builds treat warnings as errors. -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

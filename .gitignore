@@ -1,0 +1,43 @@
+# Build output
+bin/
+obj/
+frontend/dist/
+src/MasoloAgro.App/wwwroot/
+
+# Frontend dependencies and lockfile-adjacent artifacts
+frontend/node_modules/
+frontend/.vite/
+
+# Local SQLite databases (business data, never commit)
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Local secrets and machine-specific config
+appsettings.Development.json
+*.pfx
+*.user
+.env
+.env.local
+
+# IDE and editor files
+.vs/
+.vscode/
+.idea/
+*.suo
+*.sdf
+*.opensdf
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Test and publish artifacts
+TestResults/
+publish/
+*.trx
+*.coverage
+*.coveragexml
