@@ -5,9 +5,9 @@ Do not claim work here unless it was implemented and verified.
 
 ## Current phase
 
-Foundation complete. No application features built yet. The next work is
-feature 1 (recommended: local authentication + users, since every other
-feature depends on session and roles).
+Foundation plus initial database schema complete, verified, tested, and
+marked done (spec 0001 Accepted). All scope boxes show done. Suggested
+next work is auth plus users on top of this schema.
 
 ## Completed work
 
@@ -45,17 +45,28 @@ feature depends on session and roles).
   of the project README. Commit identity: MusingaBrian with the GitHub
   noreply email.
 - 2 MSTest smoke tests pass: hasher round-trip, SQLite in-memory connect.
+- Spec 0001 built: twelve Domain entities plus SaleStatus plus
+  PurchaseStatus plus StockMovementType, twelve fluent configs, AppDbContext
+  with twelve sets plus assembly scan, InitialSchema migration, runtime
+  DbSeeder.EnsureOwnerAsync for the first Owner.
+- 19 new MSTest tests pass (21 of 21 with smoke): money exactness, kg store,
+  deal time prices, totals math, happy path purchase plus sale plus partial
+  pay, uniques, quantity plus paid range, safe deletes, reversal, rollback,
+  seed plus sign in, session expiry.
+- Schema guard note: SQLite keeps decimal values as text, so every numeric
+  guard compares after CAST to REAL. The note lives in code in
+  src/MasoloAgro.Infrastructure/Database/AppDbContext.cs.
+- Spec 0001 promoted to a folder with index plus rationale plus verify files.
 
 ## Work in progress
 
-Nothing. Foundation is closed out and green.
+Nothing. The schema feature is done and closed out.
 
 ## Remaining tasks
 
-1. Start the auth/users feature: user entity, password login/logout,
-   session over the bridge, role enforcement in C#.
-2. Full EF Core schema + first migration (arrives with the first feature
-   that persists data).
+1. Start the auth/users feature: sign in plus logout, session over the
+   bridge, role enforcement in C#, built on the new User plus UserSession
+   tables.
 
 ## Technical decisions
 
@@ -81,6 +92,13 @@ Nothing. Foundation is closed out and green.
 - `src/MasoloAgro.Application/Common/Interfaces/IPasswordHasher.cs`
 - `src/MasoloAgro.Domain/Enums/UserRole.cs`
 - `src/MasoloAgro.Tests/FoundationSmokeTests.cs`
+- `src/MasoloAgro.Domain/Entities/` (twelve entities) plus
+  `src/MasoloAgro.Domain/Enums/` (UserRole plus SaleStatus plus
+  PurchaseStatus plus StockMovementType)
+- `src/MasoloAgro.Infrastructure/Database/` (AppDbContext, twelve configs in
+  `Configurations/`, `DbSeeder`, `Migrations/` with InitialSchema)
+- `src/MasoloAgro.Tests/SchemaModelTests.cs`,
+  `src/MasoloAgro.Tests/SchemaGuardTests.cs`
 - `frontend/src/lib/bridge/`, `frontend/src/lib/formatting/`
 - `scripts/`, `Directory.Build.props`, `.editorconfig`, `.gitignore`
 
@@ -92,17 +110,26 @@ Nothing. Foundation is closed out and green.
 - Tool runner note: long `bash` commands with pipes/chains sometimes get
   killed (`Unknown: ChildProcess.kill`); single commands and
   `--reporter=append-only` for pnpm worked reliably.
+- Fixed while building spec 0001: six guard tests first failed because
+  SQLite keeps decimal values as text (plain compare never fires) and
+  because tracked child rows soften deletes client side. Fixed with CAST to
+  REAL in configs plus ChangeTracker.Clear with key only stubs in the delete
+  tests. Lesson recorded: numeric guards on SQLite need CAST, delete guard
+  tests must clear tracked rows first.
 
 ## Verification status (last full pass, all green)
 
-- `pnpm typecheck`, `pnpm lint`, `pnpm build` in `frontend/`
-- `dotnet build MasoloAgro.sln -c Release` (0 warnings, 0 errors)
-- `dotnet test MasoloAgro.sln -c Release` (2/2 passed)
+- `dotnet build src/MasoloAgro.App -c Release` (0 warnings, 0 errors)
+- `dotnet test src/MasoloAgro.Tests -c Release` (32 of 32 passed)
+- Fresh `InitialSchema` migration applies clean with `dotnet-ef database
+  update` to temp files (two passes: first shape, then CAST guard shape)
+- Frontend not touched this session (`pnpm typecheck`, `pnpm lint`,
+  `pnpm build` last green at foundation)
 
 ## Recommended starting point for the next session
 
 1. Read AGENTS.md and this file.
 2. Run `git status` and `git log --oneline -5`.
-3. Ask the user for the initial commit, then start the auth/users feature:
-   user entity, password login/logout, session over the bridge, role
-   enforcement in C#.
+3. Suggested next: `/check verify initial database schema` (scope box 3),
+   then `/test initial database schema` (scope box 4), then start the
+   auth/users feature on the new schema.

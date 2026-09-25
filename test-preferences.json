@@ -1,0 +1,9 @@
+{
+  "tool": "MSTest",
+  "gate": null,
+  "additionalTools": [],
+  "e2eTool": "none",
+  "testDir": "src/MasoloAgro.Tests",
+  "filePattern": "*Tests.cs",
+  "packageManager": "dotnet"
+}
